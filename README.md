@@ -4,7 +4,7 @@
 * Postgres running locally
   * host: localhost
   * port: 5432
-##### To run
+#### To run
 
 ````
 docker-compose up -d
