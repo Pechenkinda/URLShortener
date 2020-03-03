@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "url_storage", uniqueConstraints=@UniqueConstraint(columnNames = {"short_url"}))
+@Table(name = "url_storage")
 public class UrlStorageEntity implements Identifiable<Long> {
 
     @Id
@@ -18,6 +18,6 @@ public class UrlStorageEntity implements Identifiable<Long> {
     @Column(name = "original_url", unique = true)
     private String originalUrl;
 
-    @Column(name = "short_url")
+    @Column(name = "short_url", unique = true)
     private String shortUrl;
 }

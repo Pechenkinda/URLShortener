@@ -5,7 +5,9 @@ import com.dmitriy.shortener.repository.JpaUrlStorageRepository;
 import com.dmitriy.shortener.service.UrlShortenerService;
 import com.google.common.hash.Hashing;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,16 +21,18 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     private final JpaUrlStorageRepository jpaUrlStorageRepository;
 
     @Override
-    @Cacheable("url")
-    public String createShortUrl(String originalUrl) {
+    @Caching(
+            cacheable = {
+                    @Cacheable(value = "originalUrl", key = "#entity.originalUrl")
+            },
+            evict = {
+                    @CacheEvict(value = "shortUrl", key = "#entity.shortUrl")
+            }
+    )
+    public String createShortUrl(UrlStorageEntity entity) {
 
-        UrlStorageEntity result = jpaUrlStorageRepository.findByOriginalUrl(originalUrl);
+        UrlStorageEntity result = jpaUrlStorageRepository.findByOriginalUrl(entity.getOriginalUrl());
         if (result == null) {
-            String shortUrl = Hashing.murmur3_32().hashString(originalUrl, StandardCharsets.UTF_8).toString();
-            UrlStorageEntity entity = new UrlStorageEntity();
-            entity.setOriginalUrl(originalUrl);
-            entity.setShortUrl(shortUrl);
-
             result = jpaUrlStorageRepository.saveAndFlush(entity);
         }
 
@@ -36,7 +40,7 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     }
 
     @Override
-    @Cacheable("url")
+    @Cacheable("shortUrl")
     public String getOriginalUrl(String shortUrl) {
         UrlStorageEntity result = jpaUrlStorageRepository.findByShortUrl(shortUrl);
 

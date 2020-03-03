@@ -1,5 +1,6 @@
 package com.dmitriy.shortener;
 
+import com.dmitriy.shortener.model.UrlStorageEntity;
 import com.dmitriy.shortener.service.UrlShortenerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,11 @@ public class UrlShortenerTest {
 
     @Test
     public void testGetOriginalUrl() throws Exception {
-        urlShortenerService.createShortUrl(ORIGINAL_URL);
+        UrlStorageEntity entity = new UrlStorageEntity();
+        entity.setOriginalUrl(ORIGINAL_URL);
+        entity.setShortUrl(SHORT_URL);
+
+        urlShortenerService.createShortUrl(entity);
 
         mvc.perform(get("/rest/url/" + SHORT_URL)
                 .contentType(MediaType.APPLICATION_JSON))
