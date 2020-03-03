@@ -44,13 +44,13 @@ public class UrlShortenerTest {
         assertEquals(ORIGINAL_URL, originalUrl);
     }
 
-//    @Test
-//    public void testGetOriginalUrl() throws Exception {
-//        urlShortenerService.createShortUrl(ORIGINAL_URL);
-//
-//        mvc.perform(get("/rest/url/" + SHORT_URL)
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", is(ORIGINAL_URL)));
-//    }
+    @Test
+    public void testGetOriginalUrl() throws Exception {
+        urlShortenerService.createShortUrl(ORIGINAL_URL);
+
+        mvc.perform(get("/rest/url/" + SHORT_URL)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is(ORIGINAL_URL)));
+    }
 }
