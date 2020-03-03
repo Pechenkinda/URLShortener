@@ -1,22 +1,34 @@
 # URL Shortener
 
-### Prerequisites
+## 1. Prerequisites
+
 * Postgres running locally
   * host: localhost
   * port: 5432
 #### To run
 
 ````
-docker-compose up -d
+docker-compose up
+````
+#### Environment variables
+````
+POSTGRESQL_NODES - host and port for postgres (by default: localhost:5432) 
+POSTGRESQL_DATABASE - database name (by default: postgres) 
+POSTGRESQL_USER - username for postgres (by default: postgres)
+POSTGRESQL_PASSWORD - password for postgres (by default: postgres)
 ````
 
-### Execution
-
+## 2. Build app
+#### Build jar
+````
+mvn clean install
+````
+#### Execution
 ```
 java -jar url-shortner.jar
 ```
 
-### API Details
+## 3. API Details
 #### Create Short URL
 URL:
 
