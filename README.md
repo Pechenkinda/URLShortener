@@ -46,7 +46,7 @@ Response codes:
 | 200         | successful operation  |
 | 500         | internal server error |
 
-#### Get Original URL:
+#### Get Original URL
 URL:
 
 `http://localhost:8080/rest/url/{shortUrl}`
