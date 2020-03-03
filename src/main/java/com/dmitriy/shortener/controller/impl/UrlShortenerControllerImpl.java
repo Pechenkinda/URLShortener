@@ -1,6 +1,8 @@
 package com.dmitriy.shortener.controller.impl;
 
 import com.dmitriy.shortener.controller.UrlShortenerController;
+import com.dmitriy.shortener.dto.UrlDTO;
+import com.dmitriy.shortener.exception.UrlNotFoundException;
 import com.dmitriy.shortener.model.UrlStorageEntity;
 import com.dmitriy.shortener.service.UrlShortenerService;
 import com.google.common.hash.Hashing;
@@ -20,10 +22,12 @@ public class UrlShortenerControllerImpl implements UrlShortenerController {
 
     private final UrlShortenerService urlShortenerService;
 
-    public ResponseEntity<String> createShortUrl(String originalUrl) {
+    public ResponseEntity<UrlDTO> createShortUrl(UrlDTO urlDTO) {
         UrlValidator urlValidator = new UrlValidator(
                 new String[]{"http", "https"}
         );
+
+        String originalUrl = urlDTO.getUrl();
 
         if (urlValidator.isValid(originalUrl)) {
             String shortUrl = Hashing.murmur3_32().hashString(originalUrl, StandardCharsets.UTF_8).toString();
@@ -32,19 +36,19 @@ public class UrlShortenerControllerImpl implements UrlShortenerController {
             entity.setShortUrl(shortUrl);
 
             String currentShortUrl = urlShortenerService.createShortUrl(entity);
-            return ResponseEntity.ok(currentShortUrl);
+            return ResponseEntity.ok(new UrlDTO(currentShortUrl));
         }
 
         throw new RuntimeException("Url invalid: " + originalUrl);
     }
 
-    public ResponseEntity<String> getOriginalUrl(String shortUrl) {
+    public ResponseEntity<UrlDTO> getOriginalUrl(String shortUrl) {
         String originalUrl = urlShortenerService.getOriginalUrl(shortUrl);
 
         if (originalUrl == null) {
-            throw new RuntimeException("Original url for short url " + shortUrl + " was not found");
+            throw new UrlNotFoundException("Original url for short url " + shortUrl + " was not found");
         }
 
-        return ResponseEntity.ok(originalUrl);
+        return ResponseEntity.ok(new UrlDTO(originalUrl));
     }
 }

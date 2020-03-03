@@ -2,6 +2,7 @@ package com.dmitriy.shortener;
 
 import com.dmitriy.shortener.model.UrlStorageEntity;
 import com.dmitriy.shortener.service.UrlShortenerService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,16 @@ public class UrlShortenerTest {
     @Autowired
     private UrlShortenerService urlShortenerService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private static final String ORIGINAL_URL = "https://www.google.com/";
     private static final String SHORT_URL = "cac87a2c";
 
     @Test
     public void testCreateShortUrl() throws Exception {
         mvc.perform(post("/rest/url")
-                .content(ORIGINAL_URL)
+                .content(asJsonString(ORIGINAL_URL))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -56,6 +60,14 @@ public class UrlShortenerTest {
         mvc.perform(get("/rest/url/" + SHORT_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", is(ORIGINAL_URL)));
+                .andExpect(jsonPath("$.url", is(ORIGINAL_URL)));
+    }
+
+    private String asJsonString(String url) {
+        try {
+            return objectMapper.writeValueAsString(url);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

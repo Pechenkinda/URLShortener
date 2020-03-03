@@ -18,6 +18,7 @@
         <java.version>13</java.version>
         <commons.validator.version>1.6</commons.validator.version>
         <com.google.guava.version>28.2-jre</com.google.guava.version>
+        <jar.finalName>url-shortener</jar.finalName>
     </properties>
 
     <dependencies>
@@ -73,6 +74,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <finalName>${jar.finalName}</finalName>
+                </configuration>
             </plugin>
         </plugins>
     </build>
