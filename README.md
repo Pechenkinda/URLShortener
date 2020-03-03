@@ -17,9 +17,16 @@ java -jar url-shortner.jar
 ```
 
 ### API Details
-#### Create Short URL:
+#### Create Short URL
+URL:
+
 `http://localhost:8080/rest/url`
 
+Method:
+
+````
+POST
+````
 Request body:
 ```JSON
 {
@@ -40,7 +47,14 @@ Response codes:
 | 500         | internal server error |
 
 #### Get Original URL:
+URL:
+
 `http://localhost:8080/rest/url/{shortUrl}`
+
+Method:
+````
+GET
+````
 
 Response body:
 ```JSON
