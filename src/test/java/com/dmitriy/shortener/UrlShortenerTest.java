@@ -1,5 +1,6 @@
 package com.dmitriy.shortener;
 
+import com.dmitriy.shortener.exception.UrlNotFoundException;
 import com.dmitriy.shortener.model.UrlStorageEntity;
 import com.dmitriy.shortener.service.UrlShortenerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,11 +14,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -35,12 +35,15 @@ public class UrlShortenerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final String BASE_PATH = "/rest/url/";
+
     private static final String ORIGINAL_URL = "https://www.google.com/";
     private static final String SHORT_URL = "cac87a2c";
+    private static final String INVALID_SHORT_URL = "abc";
 
     @Test
     public void testCreateShortUrl() throws Exception {
-        mvc.perform(post("/rest/url")
+        mvc.perform(post(BASE_PATH)
                 .content(asJsonString(ORIGINAL_URL))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -50,17 +53,24 @@ public class UrlShortenerTest {
     }
 
     @Test
-    public void testGetOriginalUrl() throws Exception {
+    public void testRetriveOriginalUrl() throws Exception {
         UrlStorageEntity entity = new UrlStorageEntity();
         entity.setOriginalUrl(ORIGINAL_URL);
         entity.setShortUrl(SHORT_URL);
 
         urlShortenerService.create(entity);
 
-        mvc.perform(get("/rest/url/" + SHORT_URL)
+        mvc.perform(get(BASE_PATH + SHORT_URL)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.url", is(ORIGINAL_URL)));
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(ORIGINAL_URL));
+    }
+
+    @Test
+    public void testUrlNotFound() throws Exception {
+        mvc.perform(get(BASE_PATH + INVALID_SHORT_URL)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     private String asJsonString(String url) {

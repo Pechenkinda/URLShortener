@@ -48,7 +48,7 @@ Request body:
 Response body:
 ```JSON
 {
-    "url": "cac87a2c"
+    "url": "http://localhost:8080/rest/url/cac87a2c"
 }
 ```
 Response codes:
@@ -58,7 +58,7 @@ Response codes:
 | 200         | successful operation  |
 | 500         | internal server error |
 
-#### Get Original URL
+#### Retrive Original URL
 URL:
 
 `http://localhost:8080/rest/url/{shortUrl}`
@@ -69,10 +69,7 @@ GET
 ````
 
 Response body:
-```JSON
-{
-    "url": "https://www.google.com/"
-}
+```
 ```
 Response codes:
 

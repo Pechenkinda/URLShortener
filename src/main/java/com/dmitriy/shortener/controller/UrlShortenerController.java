@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface UrlShortenerController {
 
     @PostMapping
-    ResponseEntity<UrlDTO> createShortUrl(@RequestBody UrlDTO originalUrl);
+    ResponseEntity<UrlDTO> createShortUrl(@RequestBody UrlDTO originalUrl,
+                                          HttpServletRequest request);
 
     @GetMapping("/{shortUrl}")
-    ResponseEntity<UrlDTO> getOriginalUrl(@PathVariable String shortUrl);
+    ResponseEntity<Void> retriveOriginalUrl(@PathVariable String shortUrl);
 }
