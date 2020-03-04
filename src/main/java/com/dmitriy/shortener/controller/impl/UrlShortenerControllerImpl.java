@@ -35,20 +35,20 @@ public class UrlShortenerControllerImpl implements UrlShortenerController {
             entity.setOriginalUrl(originalUrl);
             entity.setShortUrl(shortUrl);
 
-            String currentShortUrl = urlShortenerService.createShortUrl(entity);
-            return ResponseEntity.ok(new UrlDTO(currentShortUrl));
+            UrlStorageEntity currentEntity = urlShortenerService.create(entity);
+            return ResponseEntity.ok(new UrlDTO(currentEntity.getShortUrl()));
         }
 
         throw new RuntimeException("Url invalid: " + originalUrl);
     }
 
     public ResponseEntity<UrlDTO> getOriginalUrl(String shortUrl) {
-        String originalUrl = urlShortenerService.getOriginalUrl(shortUrl);
+        UrlStorageEntity entity = urlShortenerService.findByShortUrl(shortUrl);
 
-        if (originalUrl == null) {
+        if (entity == null) {
             throw new UrlNotFoundException("Original url for short url " + shortUrl + " was not found");
         }
 
-        return ResponseEntity.ok(new UrlDTO(originalUrl));
+        return ResponseEntity.ok(new UrlDTO(entity.getOriginalUrl()));
     }
 }

@@ -17,26 +17,21 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     private final JpaUrlStorageRepository jpaUrlStorageRepository;
 
     @Override
-    @CachePut(value = "shortUrl", key = "#entity.shortUrl")
-    public String createShortUrl(UrlStorageEntity entity) {
+    @CachePut(value = "url", key = "#entity.shortUrl")
+    public UrlStorageEntity create(UrlStorageEntity entity) {
 
         UrlStorageEntity result = jpaUrlStorageRepository.findByOriginalUrl(entity.getOriginalUrl());
         if (result == null) {
             result = jpaUrlStorageRepository.saveAndFlush(entity);
         }
 
-        return result.getShortUrl();
+        return result;
     }
 
     @Override
-    @Cacheable("shortUrl")
-    public String getOriginalUrl(String shortUrl) {
-        UrlStorageEntity result = jpaUrlStorageRepository.findByShortUrl(shortUrl);
+    @Cacheable("url")
+    public UrlStorageEntity findByShortUrl(String shortUrl) {
 
-        if (result == null) {
-            return null;
-        }
-
-        return result.getOriginalUrl();
+        return jpaUrlStorageRepository.findByShortUrl(shortUrl);
     }
 }

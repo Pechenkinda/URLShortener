@@ -4,7 +4,7 @@ import com.dmitriy.shortener.model.UrlStorageEntity;
 
 public interface UrlShortenerService {
 
-    String createShortUrl(UrlStorageEntity entity);
+    UrlStorageEntity create(UrlStorageEntity entity);
 
-    String getOriginalUrl(String shortUrl);
+    UrlStorageEntity findByShortUrl(String shortUrl);
 }

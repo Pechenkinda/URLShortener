@@ -45,8 +45,8 @@ public class UrlShortenerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        String originalUrl = urlShortenerService.getOriginalUrl(SHORT_URL);
-        assertEquals(ORIGINAL_URL, originalUrl);
+        UrlStorageEntity entity = urlShortenerService.findByShortUrl(SHORT_URL);
+        assertEquals(ORIGINAL_URL, entity.getOriginalUrl());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class UrlShortenerTest {
         entity.setOriginalUrl(ORIGINAL_URL);
         entity.setShortUrl(SHORT_URL);
 
-        urlShortenerService.createShortUrl(entity);
+        urlShortenerService.create(entity);
 
         mvc.perform(get("/rest/url/" + SHORT_URL)
                 .contentType(MediaType.APPLICATION_JSON))
