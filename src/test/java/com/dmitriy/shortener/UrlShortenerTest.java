@@ -1,6 +1,5 @@
 package com.dmitriy.shortener;
 
-import com.dmitriy.shortener.exception.UrlNotFoundException;
 import com.dmitriy.shortener.model.UrlStorageEntity;
 import com.dmitriy.shortener.service.UrlShortenerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +38,7 @@ public class UrlShortenerTest {
 
     private static final String ORIGINAL_URL = "https://www.google.com/";
     private static final String SHORT_URL = "cac87a2c";
-    private static final String INVALID_SHORT_URL = "abc";
+    private static final String INVALID_URL = "abc";
 
     @Test
     public void testCreateShortUrl() throws Exception {
@@ -68,9 +67,17 @@ public class UrlShortenerTest {
 
     @Test
     public void testUrlNotFound() throws Exception {
-        mvc.perform(get(BASE_PATH + INVALID_SHORT_URL)
+        mvc.perform(get(BASE_PATH + INVALID_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testInvalidUrl() throws Exception {
+        mvc.perform(post(BASE_PATH)
+                .content(asJsonString(INVALID_URL))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     private String asJsonString(String url) {

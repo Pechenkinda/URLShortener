@@ -2,6 +2,7 @@ package com.dmitriy.shortener.controller.impl;
 
 import com.dmitriy.shortener.controller.UrlShortenerController;
 import com.dmitriy.shortener.dto.UrlDTO;
+import com.dmitriy.shortener.exception.InvalidUrlException;
 import com.dmitriy.shortener.exception.UrlNotFoundException;
 import com.dmitriy.shortener.model.UrlStorageEntity;
 import com.dmitriy.shortener.service.UrlShortenerService;
@@ -44,7 +45,7 @@ public class UrlShortenerControllerImpl implements UrlShortenerController {
             return ResponseEntity.ok(new UrlDTO(fullShortUrl));
         }
 
-        throw new RuntimeException("Url invalid: " + originalUrl);
+        throw new InvalidUrlException("Url invalid: " + originalUrl);
     }
 
     public ResponseEntity<Void> retriveOriginalUrl(String shortUrl) {

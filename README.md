@@ -76,5 +76,6 @@ Response codes:
 | HTTP Status | Description           |
 |-------------|-----------------------|
 | 200         | successful operation  |
+| 400         | bad request           |
 | 404         | not found             |
 | 500         | internal server error |
