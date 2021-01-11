@@ -2,20 +2,13 @@
 
 ## 1. Prerequisites
 
-* Postgres running locally
+* Mongo running locally
   * host: localhost
-  * port: 5432
+  * port: 27017
 #### To run
 
 ````
 docker-compose up
-````
-#### Environment variables
-````
-POSTGRESQL_NODES - host and port for postgres (by default: localhost:5432) 
-POSTGRESQL_DATABASE - database name (by default: postgres) 
-POSTGRESQL_USER - username for postgres (by default: postgres)
-POSTGRESQL_PASSWORD - password for postgres (by default: postgres)
 ````
 
 ## 2. Build app
