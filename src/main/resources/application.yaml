@@ -1,10 +1,13 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://${POSTGRESQL_NODES:localhost:5432}/${POSTGRESQL_DATABASE:postgres}
-    username: ${POSTGRESQL_USER:postgres}
-    password: ${POSTGRESQL_PASSWORD:postgres}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    generate-ddl: true
+  jackson:
+    default-property-inclusion: non_null
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/urls
+  application:
+    name: url-shortener
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
